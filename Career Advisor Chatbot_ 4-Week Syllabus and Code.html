@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Career Advisor Chatbot: 4-Week Syllabus and Code</title>
+<style>
+:root{
+  --bg:#F3F5F2; --surface:#FFFFFF; --ink:#18241F; --muted:#55645D; --line:#D5DDD7;
+  --accent:#1F6B57; --soft:#DDEEE7; --warn:#8A3B12; --warn-soft:#F7E4D8;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1914; --surface:#16251E; --ink:#E6EFEA; --muted:#9BB0A5; --line:#2A3D34;
+    --accent:#6FD0AE; --soft:#173528; --warn:#F0A878; --warn-soft:#3A2517; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1914; --surface:#16251E; --ink:#E6EFEA; --muted:#9BB0A5; --line:#2A3D34;
+  --accent:#6FD0AE; --soft:#173528; --warn:#F0A878; --warn-soft:#3A2517; color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:48px 20px}
+h1{font-size:clamp(1.9rem,5.5vw,3rem);line-height:1.08;letter-spacing:-.02em;margin:0 0 12px;font-weight:800}
+h2{font-size:clamp(1.3rem,3.5vw,1.75rem);margin:44px 0 8px;font-weight:750}
+h3{font-size:1.05rem;margin:0 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.muted{color:var(--muted)}
+ul,ol{margin:6px 0 0;padding-left:20px}
+li{margin:5px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.panel.in{border-left:6px solid var(--accent)}
+.panel.out{border-left:6px solid var(--warn)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:10px 0 0;counter-reset:s}
+.flow li{counter-increment:s;margin:0;background:var(--soft);border-radius:999px;padding:5px 14px;font-size:.93rem}
+.flow li::before{content:counter(s) ". ";font-weight:700;color:var(--accent)}
+.week{position:relative;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:12px;padding:6px 18px 16px;margin-top:14px}
+.whead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:8px}
+.whead h3{margin:0;font-size:1.15rem}
+.goal{color:var(--muted);margin:2px 0 8px}
+.done{margin:10px 0 0;font-size:.95rem}
+.done b{color:var(--accent)}
+.dots{font:inherit;font-size:1.5rem;line-height:1;font-weight:700;border:0;background:transparent;color:var(--accent);cursor:pointer;padding:2px 10px;border-radius:8px}
+.dots:hover,.dots[aria-expanded="true"]{background:var(--bg)}
+.menu{position:absolute;right:14px;top:46px;z-index:5;min-width:170px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.menu button{display:block;width:100%;text-align:left;font:inherit;font-size:.95rem;border:0;background:transparent;color:var(--ink);padding:8px 10px;border-radius:7px;cursor:pointer}
+.menu button[hidden]{display:none}
+.menu button:hover,.menu button:focus-visible{background:var(--bg)}
+button:focus-visible,pre:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+pre{margin:12px 0 0;white-space:pre;overflow:auto;max-height:420px;font:.84rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);user-select:text}
+#st{font-size:.92rem;color:var(--muted);min-height:1.4em}
+.thanks{margin:48px 0 0;padding:24px 20px;text-align:center;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.thanks h2{margin:0 0 6px}
+.thanks p{margin:0 auto}
+@media (max-width:680px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Career advisor chatbot: 4-week build syllabus</h1>
+  <p class="muted">A week-by-week plan with starter code for each week's data and deliverable. It fits a solo builder or a team of two. Click the three dots beside a week to view, copy or download that week's code.</p>
+
+  <div class="two">
+    <div class="panel in">
+      <h3>In scope for v1</h3>
+      <ul>
+        <li>Single-page chat UI</li>
+        <li>Small API server (FastAPI or Express)</li>
+        <li>Claude API with an advisor system prompt</li>
+        <li>Catalog of about 20 careers and 100 courses</li>
+        <li>Keyword or embedding search over the catalog</li>
+        <li>In-memory sessions, thumbs up/down, summary export</li>
+      </ul>
+    </div>
+    <div class="panel out">
+      <h3>Out of scope for v1</h3>
+      <ul>
+        <li>User accounts and login</li>
+        <li>Resume parsing</li>
+        <li>Job listings or job-board integration</li>
+        <li>Payments or enrollment</li>
+        <li>Mentor matching</li>
+        <li>Multi-language support and voice</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Conversation flow</h2>
+  <ol class="flow">
+    <li>Welcome</li><li>Intake questions</li><li>Profile summary (user confirms)</li><li>3 career matches</li><li>User picks one</li><li>Skill gap and course path</li><li>Follow-up Q&amp;A</li><li>Summary export</li>
+  </ol>
+
+  <h2>Weekly syllabus and code</h2>
+  <div id="weeks"></div>
+  <p id="st" role="status" aria-live="polite"></p>
+
+  <h2>Targets and risks</h2>
+  <div class="two">
+    <div class="panel in">
+      <h3>Success targets</h3>
+      <ul>
+        <li>Intake completion above 70%</li>
+        <li>Thumbs up above 70% of ratings</li>
+        <li>Users who reach a course recommendation</li>
+        <li>Click-through on course links</li>
+        <li>Feedback from 20 to 30 pilot users</li>
+      </ul>
+    </div>
+    <div class="panel out">
+      <h3>Main risks and fixes</h3>
+      <ul>
+        <li>Invented or outdated courses: recommend only from the catalog and keep a last-updated field</li>
+        <li>Generic advice: make the bot cite the user's own answers</li>
+        <li>Salary claims: keep ranges approximate and link to sources</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="thanks">
+    <h2>Thank you!</h2>
+    <p class="muted">Thanks for reading. Build it small, test it with real people, and keep improving the prompts and data.</p>
+  </div>
+</main>
+
+<script>
+(function(){
+  var W=[
+  {t:'Personas, dataset and prompts',g:'Decide who the bot helps, build the catalog, and write the advisor prompt.',
+   d:[['Days 1 to 2','Write 3 user personas and the intake questions for each.'],['Days 3 to 4','Build the catalog: about 20 careers and 100 courses with title, provider, URL, level, cost, skills and last_updated.'],['Day 5','Write the system prompt and the conversation flow rules.']],
+   done:'catalog files validate, and the prompt asks one question at a time in a hand test.',
+   code:`// ---- data/careers.json (sample entry) ----
+[
+  {
+    "id": "data-analyst",
+    "title": "Data Analyst",
+    "summary": "Turns data into reports and decisions.",
+    "skills": ["sql", "excel", "visualization", "statistics"],
+    "salary_note": "Approximate; varies by region.",
+    "last_updated": "2026-10-01"
+  }
+]
+
+// ---- data/courses.json (sample entry) ----
+[
+  {
+    "id": "sql-basics-01",
+    "title": "SQL for Beginners",
+    "provider": "Example Academy",
+    "url": "https://example.com/sql-basics",
+    "level": "beginner",
+    "cost": "free",
+    "skills": ["sql"],
+    "last_updated": "2026-10-01"
+  }
+]
+
+// ---- prompts/system.txt ----
+You are a career advisor for people choosing a data career.
+Rules:
+1. Ask ONE question at a time. Do not recommend until intake is complete.
+2. If the user is unsure, offer 2 to 4 options instead of open questions.
+3. Recommend only courses from the CATALOG block. Never invent courses or URLs.
+4. Tie every recommendation to something the user said.
+5. Say salary figures are approximate and vary by region.
+Flow: welcome, intake, profile summary (user confirms), 3 career matches,
+user picks one, skill gap and course path, follow-up Q&A, summary export.`},
+  {t:'Backend, Claude and retrieval',g:'Build the API, connect Claude, and search the catalog so only real courses reach the prompt.',
+   d:[['Days 1 to 2','Set up the API server and an in-memory session store.'],['Days 3 to 4','Add keyword search over courses.json and pass the matches into the prompt.'],['Day 5','Connect the Claude API and test the full intake-to-courses flow in the terminal.']],
+   done:'a conversation reaches a course path and every course comes from the catalog.',
+   code:`# app.py  (pip install fastapi uvicorn anthropic)
+import json, re
+from fastapi import FastAPI
+from pydantic import BaseModel
+import anthropic
+
+app = FastAPI()
+client = anthropic.Anthropic()            # reads ANTHROPIC_API_KEY
+SYSTEM = open('prompts/system.txt').read()
+COURSES = json.load(open('data/courses.json'))
+SESSIONS = {}                             # session_id -> messages (no accounts)
+
+def search_courses(query, k=5):
+    words = set(re.findall(r'\\w+', query.lower()))
+    def score(c):
+        text = ' '.join([c['title'], *c['skills']]).lower()
+        return sum(w in text for w in words)
+    ranked = sorted(COURSES, key=score, reverse=True)
+    return [c for c in ranked[:k] if score(c) > 0]
+
+class Msg(BaseModel):
+    session_id: str
+    text: str
+
+@app.post('/chat')
+def chat(m: Msg):
+    history = SESSIONS.setdefault(m.session_id, [])
+    history.append({'role': 'user', 'content': m.text})
+    said = ' '.join(h['content'] for h in history if h['role'] == 'user')
+    catalog = json.dumps(search_courses(said))
+    reply = client.messages.create(
+        model='claude-sonnet-5-5', max_tokens=800,
+        system=SYSTEM + '\\n\\nCATALOG (only recommend from this):\\n' + catalog,
+        messages=history)
+    text = reply.content[0].text
+    history.append({'role': 'assistant', 'content': text})
+    return {'reply': text}
+
+# run: uvicorn app:app --reload`},
+  {t:'Chat UI, export and feedback',g:'Give people a simple chat screen, a one-page export, and thumbs up/down on answers.',
+   d:[['Days 1 to 2','Build the single-page chat UI and connect it to /chat.'],['Day 3','Add thumbs up/down on each advisor reply and a /feedback endpoint.'],['Days 4 to 5','Add the summary export and test on a phone-sized screen.']],
+   done:'a person can chat, rate replies and export a one-page summary without help.',
+   code:`# add to app.py: feedback and export
+@app.post('/feedback')
+def feedback(f: dict):
+    with open('feedback.jsonl', 'a') as out:
+        out.write(json.dumps(f) + '\\n')
+    return {'ok': True}
+
+@app.get('/export/{session_id}')
+def export(session_id: str):
+    history = SESSIONS.get(session_id, [])
+    ask = history + [{'role': 'user', 'content':
+        'Write a one-page summary: profile, chosen career, skill gap, '
+        'course path with catalog URLs, and the salary note.'}]
+    r = client.messages.create(
+        model='claude-sonnet-5-5', max_tokens=900,
+        system=SYSTEM + '\\n\\nCATALOG:\\n' + json.dumps(COURSES),
+        messages=ask)
+    return {'summary': r.content[0].text}
+
+<!-- static/index.html -->
+<div id="log"></div>
+<input id="box" placeholder="Type your answer">
+<button id="send">Send</button>
+<button id="export">Export summary</button>
+<script>
+const sid = crypto.randomUUID();
+const log = document.getElementById('log');
+const post = (url, body) => fetch(url, {method: 'POST',
+  headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+
+function add(who, text) {
+  const row = document.createElement('div');
+  row.textContent = who + ': ' + text;
+  if (who === 'Advisor') {
+    for (const [label, rating] of [['Good', 1], ['Bad', 0]]) {
+      const b = document.createElement('button');
+      b.textContent = label;
+      b.onclick = () => post('/feedback', {session_id: sid, rating, text});
+      row.append(' ', b);
+    }
+  }
+  log.append(row);
+}
+
+document.getElementById('send').onclick = async () => {
+  const box = document.getElementById('box');
+  const text = box.value.trim();
+  if (!text) return;
+  add('You', text); box.value = '';
+  const r = await (await post('/chat', {session_id: sid, text})).json();
+  add('Advisor', r.reply);
+};
+document.getElementById('export').onclick = async () => {
+  const r = await (await fetch('/export/' + sid)).json();
+  add('Summary', r.summary);
+};
+<\/script>`},
+  {t:'Pilot and improve',g:'Test with 20 to 30 people, measure the targets, and fix prompts and data.',
+   d:[['Days 1 to 2','Recruit pilot users and log events: intake_complete, course_recommendation, course_click.'],['Days 3 to 4','Run the pilot and collect thumbs up/down and short written feedback.'],['Day 5','Run the metrics script, then fix the weakest prompts and catalog entries.']],
+   done:'you have the four metrics, 20 or more feedback notes, and a short list of fixes.',
+   code:`# add to app.py: log events for metrics
+def log_event(session_id, type_):
+    with open('events.jsonl', 'a') as f:
+        f.write(json.dumps({'session_id': session_id, 'type': type_}) + '\\n')
+# call log_event(m.session_id, 'intake_complete') when intake ends,
+# 'course_recommendation' when courses are shown,
+# and 'course_click' from the UI when a course link is opened.
+
+# metrics.py: print the success metrics
+import json
+
+events = [json.loads(l) for l in open('events.jsonl')]
+feedback = [json.loads(l) for l in open('feedback.jsonl')]
+sessions = {e['session_id'] for e in events}
+
+def reached(kind):
+    return {e['session_id'] for e in events if e['type'] == kind}
+
+print('Intake completion:',
+      round(100 * len(reached('intake_complete')) / (len(sessions) or 1)), '%')
+print('Reached a course recommendation:', len(reached('course_recommendation')))
+print('Positive feedback:',
+      round(100 * sum(f['rating'] for f in feedback) / (len(feedback) or 1)), '%')
+print('Course link clicks:', sum(1 for e in events if e['type'] == 'course_click'))`}
+  ];
+
+  var host=document.getElementById('weeks'),st=document.getElementById('st'),openMenu=null,dl=null;
+  function closeMenu(){if(openMenu){openMenu.menu.hidden=true;openMenu.btn.setAttribute('aria-expanded','false');openMenu=null;}}
+  function stamp(){
+    var d=new Date(),p=function(n){return String(n).padStart(2,'0')};
+    return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds());
+  }
+  function copyTo(t){
+    var msg='Copy was blocked. Open the code and copy it by hand.';
+    function fb(){
+      try{
+        var ta=document.createElement('textarea');
+        ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        var ok=document.execCommand('copy');
+        document.body.removeChild(ta);
+        st.textContent=ok?'Code copied.':msg;
+      }catch(e){st.textContent=msg;}
+    }
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){st.textContent='Code copied.'},fb);}
+      else{fb();}
+    }catch(e){fb();}
+  }
+  function el(tag,cls,txt){var e=document.createElement(tag);if(cls){e.className=cls;}if(txt){e.textContent=txt;}return e;}
+
+  W.forEach(function(w,i){
+    var n=i+1,title='Week '+n+': '+w.t;
+    var card=el('div','week'),head=el('div','whead'),h=el('h3','',title);
+    var dots=el('button','dots','\u22ef');
+    dots.type='button';
+    dots.setAttribute('aria-label','Code options for '+title);
+    dots.setAttribute('aria-haspopup','menu');dots.setAttribute('aria-expanded','false');
+    var menu=el('div','menu');menu.setAttribute('role','menu');menu.hidden=true;
+    var codeBox=el('pre','',w.code);codeBox.hidden=true;codeBox.tabIndex=0;
+    function item(label,fn){
+      var b=el('button','',label);
+      b.type='button';b.setAttribute('role','menuitem');
+      b.addEventListener('click',function(){closeMenu();fn();});
+      menu.appendChild(b);return b;
+    }
+    var view=item('View code',function(){
+      codeBox.hidden=!codeBox.hidden;
+      view.textContent=codeBox.hidden?'View code':'Hide code';
+    });
+    item('Copy code',function(){copyTo(w.code);});
+    var dlb=item('Download code',function(){
+      if(!dl){st.textContent='Download is not available here. Use Copy code instead.';return;}
+      dl.save({filename:'career-advisor-week-'+n+'-code-'+stamp()+'.txt',data:w.code}).then(function(){
+        st.textContent='Saved.';
+      },function(e){
+        st.textContent=(e&&e.code==='declined')?'Download cancelled.':'Download is not available here. Use Copy code instead.';
+      });
+    });
+    dots.addEventListener('click',function(ev){
+      ev.stopPropagation();
+      var was=openMenu&&openMenu.menu===menu;
+      closeMenu();
+      if(!was){dlb.hidden=!dl;menu.hidden=false;dots.setAttribute('aria-expanded','true');openMenu={menu:menu,btn:dots};view.focus();}
+    });
+    head.appendChild(h);head.appendChild(dots);
+    card.appendChild(head);card.appendChild(el('p','goal',w.g));
+    var ul=el('ul');
+    w.d.forEach(function(x){var li=el('li');li.appendChild(el('b','',x[0]+': '));li.appendChild(document.createTextNode(x[1]));ul.appendChild(li);});
+    card.appendChild(ul);
+    var dn=el('p','done');dn.appendChild(el('b','','Done when: '));dn.appendChild(document.createTextNode(w.done));
+    card.appendChild(dn);card.appendChild(menu);card.appendChild(codeBox);
+    host.appendChild(card);
+  });
+
+  document.addEventListener('click',function(e){if(openMenu&&!openMenu.menu.contains(e.target)){closeMenu();}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&openMenu){var b=openMenu.btn;closeMenu();b.focus();}});
+  try{
+    if(window.claude&&window.claude.use){
+      window.claude.use('downloads').then(function(d){if(d){dl=d;}}).catch(function(){});
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

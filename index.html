@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Career & Course Advisor</title>
+  <!-- Tailwind CSS via CDN for modern UI components -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Lucide Icons for scannable UI anchors -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="bg-indigo-600 text-white p-2 rounded-lg">
+        <i data-lucide="compass" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h1 class="font-bold text-lg leading-tight">PathFinder AI</h1>
+        <p class="text-xs text-slate-500">Your Smart Career & Course Advisor</p>
+      </div>
+    </div>
+    <span class="inline-flex items-center bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+      <span class="w-2 h-2 bg-emerald-500 rounded-full mr-1.5 animate-pulse"></span>
+      Advisor Engine Active
+    </span>
+  </header>
+
+  <!-- Main Split Layout -->
+  <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    
+    <!-- Left Sidebar: Dynamic Advisor Metrics Panel -->
+    <section class="w-full md:w-80 lg:w-96 bg-white border-r border-slate-200 p-6 overflow-y-auto flex flex-col space-y-6">
+      <div>
+        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Top Fit Matches</h2>
+        <div class="space-y-3" id="match-container">
+          <!-- Default Starting Recommendation States -->
+          <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-medium text-sm text-slate-700">Tech & Software</span>
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded" id="tech-score">75%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="bg-indigo-600 h-full transition-all duration-500" id="tech-bar" style="width: 75%"></div>
+            </div>
+          </div>
+          
+          <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+            <div class="flex justify-between items-center mb-1">
+              <span class="font-medium text-sm text-slate-700">Data Science & AI</span>
+              <span class="text-xs font-bold text-violet-600 bg-violet-50 px-2 py-0.5 rounded" id="data-score">40%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="bg-violet-600 h-full transition-all duration-500" id="data-bar" style="width: 40%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Conversation Starters -->
+      <div>
+        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Suggested Topics</h2>
+        <div class="grid grid-cols-1 gap-2">
+          <button onclick="suggestPrompt('What are the best tech courses for beginners?')" class="text-left text-xs bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer">
+            💡 Tech courses for beginners
+          </button>
+          <button onclick="suggestPrompt('I like biology and analytics. What careers fit?')" class="text-left text-xs bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer">
+            🧬 Biology + Analytics career options
+          </button>
+          <button onclick="suggestPrompt('Tell me about the highest paying jobs in 2026')" class="text-left text-xs bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 p-2.5 rounded-lg transition-colors cursor-pointer">
+            💰 Top paying careers in 2026
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Side: The Chat Interface -->
+    <section class="flex-1 flex flex-col bg-slate-50 overflow-hidden">
+      <!-- Chat Message Scroll Window -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-4" id="chat-window">
+        <!-- AI Introductory Greeting Message -->
+        <div class="flex space-x-3 max-w-2xl">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0">AI</div>
+          <div class="bg-white p-4 rounded-xl shadow-xs border border-slate-100">
+            <p class="text-sm leading-relaxed">Hello! I am your AI career pathfinder. Tell me about your **interests, favorite subjects, or career goals**, and I'll recommend the ideal courses and matching professions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Chat Control Form Input -->
+      <div class="p-4 bg-white border-t border-slate-200 shrink-0">
+        <form id="chat-form" onsubmit="handleUserMessage(event)" class="max-w-4xl mx-auto flex items-center space-x-2">
+          <input 
+            type="text" 
+            id="chat-input"
+            placeholder="Type your interests (e.g., 'I love coding and design')..." 
+            class="flex-1 border border-slate-300 focus:border-indigo-500 focus:outline-none rounded-lg px-4 py-2.5 text-sm transition-colors"
+            required
+            autocomplete="off"
+          />
+          <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors cursor-pointer flex items-center space-x-1">
+            <span>Send</span>
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Mock Logic Script -->
+  <script>
+    // Initialize Lucide iconography
+    lucide.createIcons();
+
+    const chatWindow = document.getElementById('chat-window');
+    const chatInput = document.getElementById('chat-input');
+
+    // Function to handle layout logic for rendering new messages
+    function appendMessage(text, sender) {
+      const msgWrapper = document.createElement('div');
+      msgWrapper.className = sender === 'user' ? 'flex space-x-3 max-w-2xl ml-auto justify-end' : 'flex space-x-3 max-w-2xl';
+
+      const avatar = sender === 'user' 
+        ? `<div class="w-8 h-8 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-xs shrink-0 order-2 ml-3">ME</div>`
+        : `<div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mr-3">AI</div>`;
+
+      const msgBubble = `
+        <div class="${sender === 'user' ? 'bg-indigo-600 text-white' : 'bg-white text-slate-800 border border-slate-100'} p-4 rounded-xl shadow-xs">
+          <p class="text-sm leading-relaxed">${text}</p>
+        </div>
+      `;
+
+      msgWrapper.innerHTML = sender === 'user' ? msgBubble + avatar : avatar + msgBubble;
+      chatWindow.appendChild(msgWrapper);
+      
+      // Auto-scroll window view to bottom
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    // Handles submitting standard keyboard queries or button selections
+    function handleUserMessage(event) {
+      if (event) event.preventDefault();
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      appendMessage(message, 'user');
+      chatInput.value = '';
+
+      // Simulate the backend advisor response loop
+      setTimeout(() => {
+        simulateAdvisorEngine(message);
+      }, 700);
+    }
+
+    function suggestPrompt(text) {
+      chatInput.value = text;
+      handleUserMessage();
+    }
+
+    // Dynamic mock system that adjusts sidebar dashboard bars based on text keyword indicators
+    function simulateAdvisorEngine(input) {
+      let lowerInput = input.toLowerCase();
+      let reply = "That's fascinating! Tell me more about what parts of that domain excite you the most so I can build your matching profile.";
+      
+      if (lowerInput.includes('code') || lowerInput.includes('tech') || lowerInput.includes('program')) {
+        reply = "Based on your coding interests, I highly recommend a **Computer Science Pathway** or an **Agile Full-Stack Boot Camp**. Check out the UI sidebar to look at your tracking metrics!";
+        updateSidebarMetrics(92, 65);
+      } else if (lowerInput.includes('biology') || lowerInput.includes('data')) {
+        reply = "Blending data with live biological contexts maps directly into **Bioinformatics** or **Data Analytics**. These have highly accelerated industry growth right now.";
+        updateSidebarMetrics(60, 94);
+      } else if (lowerInput.includes('paying')) {
+        reply = "Top tracking career branches focus heavily on **AI Architecture, Cloud Operations Management, and Quantitative Data Engineering**.";
+        updateSidebarMetrics(85, 88);
+      }
+
+      appendMessage(reply, 'bot');
+    }
+
+    // Direct interface hooks updating visual nodes in DOM
+    function updateSidebarMetrics(techVal, dataVal) {
+      document.getElementById('tech-score').innerText = techVal + '%';
+      document.getElementById('tech-bar').style.width = techVal + '%';
+      document.getElementById('data-score').innerText = dataVal + '%';
+      document.getElementById('data-bar').style.width = dataVal + '%';
+    }
+  </script>
+</body>
+</html>

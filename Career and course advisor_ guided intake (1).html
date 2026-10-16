@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Career and course advisor: guided intake</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF1FB;--card:#fff;--ink:#14205A;--muted:#566089;--line:#CFD6EE;--brand:#3A5BD9;--on-brand:#fff;--accent:#FFB020;--panel:#14205A;--on-panel:#fff;--err:#B3261E;--chip:#E6EBFF;--bot:#E9EDFB;--me:#3A5BD9;--on-me:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A0F2E;--card:#131A48;--ink:#EEF1FF;--muted:#A9B1DA;--line:#2B3578;--brand:#7C98FF;--on-brand:#0A0F2E;--panel:#0D1442;--err:#FF9A90;--chip:#1F2860;--bot:#1D2658;--me:#7C98FF;--on-me:#0A0F2E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A0F2E;--card:#131A48;--ink:#EEF1FF;--muted:#A9B1DA;--line:#2B3578;--brand:#7C98FF;--on-brand:#0A0F2E;--panel:#0D1442;--err:#FF9A90;--chip:#1F2860;--bot:#1D2658;--me:#7C98FF;--on-me:#0A0F2E;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.shell{width:100%;max-width:1040px;display:grid;grid-template-columns:5fr 7fr;border-radius:20px;overflow:clip;background:var(--panel);border:1px solid var(--line)}
+.side{background:var(--panel);color:var(--on-panel);position:sticky;top:0;align-self:start;z-index:5;padding:32px 28px;display:flex;flex-direction:column;gap:16px}
+.side svg{width:96px;height:96px}
+.side h1{font-size:22px;line-height:1.25;font-weight:700;margin:0}
+.side p{margin:0;font-size:14px;opacity:.85}
+ol{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px}
+ol button{font:inherit;font-size:14px;color:inherit;background:none;border:0;width:100%;text-align:left;display:flex;gap:12px;align-items:center;padding:8px 10px;border-radius:10px;cursor:pointer;opacity:.6}
+ol button:disabled{cursor:default}
+ol .n{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:13px;font-weight:700}
+ol .on{opacity:1;background:rgba(255,255,255,.12)}
+ol .on .n{background:var(--accent);border-color:var(--accent);color:#14205A}
+ol .done{opacity:.95}
+ol .done .n{background:#7EF0D4;border-color:#7EF0D4;color:#14205A}
+.main{background:var(--card);padding:28px 36px 28px;display:flex;flex-direction:column;min-height:560px}
+.bar{height:6px;border-radius:3px;background:var(--chip);overflow:hidden;margin-bottom:8px}
+.bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .3s}
+.mini{display:none;font-size:13px;color:var(--muted);margin-bottom:10px}
+h2{margin:14px 0 4px;font-size:22px;font-weight:700}
+.sub{margin:0 0 20px;color:var(--muted);font-size:14px}
+.step{padding:6px 0 26px;scroll-margin-top:90px}
+.step+.step{border-top:1px solid var(--line);padding-top:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+label,.lbl{display:block;font-size:14px;font-weight:500;margin-bottom:6px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{resize:vertical;min-height:84px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offset:1px}
+.err{color:var(--err);font-size:13px;margin-top:4px;display:none}
+.bad .err{display:block}.bad input,.bad select,.bad textarea{border-color:var(--err)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--chip);border:1px solid transparent;border-radius:999px;padding:7px 15px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:400}
+.check input{width:18px;height:18px;margin-top:3px;flex:none}
+dl{margin:0 0 18px;display:grid;grid-template-columns:130px 1fr;gap:8px 14px;font-size:14px}
+dt{color:var(--muted)}dd{margin:0;font-weight:500}
+.nav{display:flex;justify-content:flex-end;gap:12px;margin-top:22px}
+.btn{font:inherit;font-weight:700;background:var(--brand);color:var(--on-brand);border:0;border-radius:12px;padding:12px 24px;cursor:pointer}
+.btn.ghost{background:var(--chip);color:var(--ink)}
+.btn:hover{filter:brightness(1.08)}
+.chat{display:none;flex-direction:column;height:min(680px,calc(100vh - 40px));width:100%;max-width:720px;background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.chat header{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--panel);color:var(--on-panel)}
+.chat header svg{width:44px;height:44px;flex:none}
+.chat header b{display:block;font-size:16px}.chat header span{font-size:13px;opacity:.8}
+.msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:82%;padding:10px 14px;border-radius:16px;background:var(--bot);white-space:pre-wrap}
+.m.me{align-self:flex-end;background:var(--me);color:var(--on-me)}
+.note{font-size:13px;color:var(--muted);text-align:center;padding:0 18px 6px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 10px}
+.send{display:flex;gap:8px;padding:12px 18px;border-top:1px solid var(--line)}
+@media (max-width:760px){.shell{grid-template-columns:1fr}.side{flex-direction:row;align-items:center;padding:16px 20px}.side svg{width:52px;height:52px}.side h1{font-size:17px}.side p,ol{display:none}.main{padding:20px 20px 24px;min-height:0}.mini{display:block}.grid{grid-template-columns:1fr}dl{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><clipPath id="av"><circle cx="100" cy="100" r="96"/></clipPath>
+<symbol id="bot" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="#3A5BD9"/><g clip-path="url(#av)"><circle cx="100" cy="130" r="72" fill="#4C6DE8"/><path d="M30 210Q30 160 100 160Q170 160 170 210Z" fill="#F4F6FF"/><polyline points="82,190 96,176 106,184 122,168" fill="none" stroke="#3A5BD9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="58" y="76" width="84" height="76" rx="26" fill="#fff"/><rect x="68" y="92" width="64" height="42" rx="17" fill="#1B2A6B"/><circle cx="87" cy="110" r="5" fill="#7EF0D4"/><circle cx="113" cy="110" r="5" fill="#7EF0D4"/><path d="M91 122Q100 130 109 122" fill="none" stroke="#7EF0D4" stroke-width="3" stroke-linecap="round"/><path d="M78 66v12q22 12 44 0V66z" fill="#0E1745"/><polygon points="100,38 152,58 100,78 48,58" fill="#14205A"/><line x1="152" y1="58" x2="152" y2="80" stroke="#FFB020" stroke-width="3" stroke-linecap="round"/><circle cx="152" cy="84" r="4" fill="#FFB020"/></g><circle cx="100" cy="100" r="96" fill="none" stroke="#fff" stroke-width="4"/></symbol></defs></svg>
+
+<main class="shell" id="signup">
+  <aside class="side">
+    <svg role="img" aria-label="Advisor robot wearing a graduation cap"><use href="#bot"/></svg>
+    <div><h1>Guided intake</h1><p>One short form with seven sections. Tap a section to jump to it.</p></div>
+    <ol id="idx" aria-label="Intake steps"></ol>
+  </aside>
+  <section class="main">
+    <div class="bar" aria-hidden="true"><i id="pb"></i></div>
+    <div class="mini" id="mini"></div>
+    <form id="f" novalidate>
+      <div class="step" data-t="Where you are now">
+        <h2>Where are you now?</h2><p class="sub">Your current education or role sets the starting point.</p>
+        <div class="grid">
+          <div class="field full"><label for="name">Full name</label><input id="name" autocomplete="name"><div class="err">Enter your full name.</div></div>
+          <div class="field full"><label for="email">Email</label><input id="email" type="email" autocomplete="email"><div class="err">Enter a valid email address.</div></div>
+          <div class="field"><label for="status">Current status</label><select id="status"><option value="">Select one</option><option>School student</option><option>College student</option><option>Recent graduate</option><option>Working professional</option><option>Career switcher</option></select><div class="err">Choose your current status.</div></div>
+          <div class="field"><label for="qual">Highest qualification</label><select id="qual"><option value="">Select one</option><option>10th / Secondary</option><option>12th / Higher secondary</option><option>Diploma</option><option>Bachelor's degree</option><option>Master's degree</option><option>Doctorate</option></select><div class="err">Choose your qualification.</div></div>
+          <div class="field full"><label for="field">Field of study or current role (optional)</label><input id="field" placeholder="e.g. Computer science, Sales executive"></div>
+        </div>
+      </div>
+      <div class="step" data-t="Interests">
+        <h2>What are you drawn to?</h2><p class="sub">Pick every topic that sparks your curiosity.</p>
+        <div class="field"><div class="chips" id="c-int" role="group" aria-label="Interests"></div><div class="err">Pick at least one interest.</div></div>
+      </div>
+      <div class="step" data-t="Skills">
+        <h2>What can you already do?</h2><p class="sub">Skills you have today, even small ones.</p>
+        <div class="field"><div class="chips" id="c-skill" role="group" aria-label="Skills"></div><div class="err">Pick at least one skill, or "Just starting out".</div></div>
+      </div>
+      <div class="step" data-t="Work style">
+        <h2>How do you like to work?</h2><p class="sub">Choose the style that sounds most like you.</p>
+        <div class="field"><div class="chips" id="c-style" role="group" aria-label="Work style"></div><div class="err">Choose one work style.</div></div>
+      </div>
+      <div class="step" data-t="Goals and why">
+        <h2>What do you want from your career?</h2><p class="sub">Select your priorities and the reasons behind your choice.</p>
+        <div class="grid">
+          <div class="field full"><span class="lbl">Priorities</span><div class="chips" id="c-goal" role="group" aria-label="Career priorities"></div><div class="err">Pick at least one priority.</div></div>
+          <div class="field full"><span class="lbl">Why are you choosing this course or career? (pick any)</span><div class="chips" id="c-why" role="group" aria-label="Reasons"></div><div class="err">Pick at least one reason.</div></div>
+          <div class="field full"><label for="why">Which course or career is it? (optional)</label><textarea id="why" placeholder="e.g. Data analytics"></textarea></div>
+        </div>
+      </div>
+      <div class="step" data-t="Time and budget">
+        <h2>How much time and money can you invest?</h2><p class="sub">We will match options to what is realistic for you.</p>
+        <div class="grid">
+          <div class="field"><label for="hrs">Hours per week</label><select id="hrs"><option>Under 5 hours</option><option>5 to 10 hours</option><option>10 to 20 hours</option><option>20+ hours</option></select></div>
+          <div class="field"><label for="dur">Time to finish</label><select id="dur"><option>Up to 3 months</option><option>3 to 6 months</option><option>6 to 12 months</option><option>More than a year</option></select></div>
+          <div class="field full"><label for="budget">Budget preference</label><select id="budget"><option>Free courses only</option><option>Low budget</option><option>Medium budget</option><option>Premium, quality matters most</option><option>Flexible</option></select></div>
+        </div>
+      </div>
+      <div class="step" data-t="Confirm">
+        <h2>Almost done</h2><p class="sub">One last confirmation and you can start chatting.</p>
+        
+        <div class="field"><label class="check"><input type="checkbox" id="ok"><span>I agree to share these details with the advisor so it can personalise its advice.</span></label><div class="err">Please accept to continue.</div></div>
+      </div>
+      <div class="nav"><button type="button" class="btn ghost" id="back" hidden>Back</button><button type="submit" class="btn" id="next">Next</button></div>
+    </form>
+  </section>
+</main>
+
+<section class="chat" id="chat" aria-label="Chat with your advisor">
+  <header><svg role="img" aria-label="Advisor"><use href="#bot"/></svg><div><b>Career and course advisor</b><span>Ready to plan with you</span></div></header>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+  <div class="note">Demo mode: replies are placeholders until this page is connected to a live AI advisor.</div>
+  <div class="quick" id="quick"></div>
+  <form class="send" id="sf"><input id="mi" placeholder="Ask about courses or careers" aria-label="Your message"><button class="btn" type="submit">Send</button></form>
+</section>
+
+<script>
+var $=function(i){return document.getElementById(i)};
+var lists={"c-int":["Technology","Data and AI","Business","Design","Healthcare","Finance","Teaching","Engineering","Creative writing","Marketing","Logical thinking","Math"],
+"c-skill":["Programming","Problem solving","Communication","Writing","Data analysis","Design","Leadership","Teamwork","Research","Public speaking","Foreign languages","Just starting out"],
+"c-style":["Independent and focused","Team and collaborative","Hands-on and practical","Analytical and research-driven","Creative and open-ended"],
+"c-goal":["High salary","Remote work","Job stability","Fast growth","Creative freedom","Social impact","Work-life balance"],
+"c-why":["Strong job demand","High salary potential","Matches my interests","Good fit for my skills","Remote or flexible work","Quick to learn","Advice from family or friends","Long-term career growth"]};
+Object.keys(lists).forEach(function(id){var box=$(id),single=id==="c-style";lists[id].forEach(function(t){var b=document.createElement("button");b.type="button";b.className="chip";b.textContent=t;b.setAttribute("aria-pressed","false");b.onclick=function(){var on=b.getAttribute("aria-pressed")==="true";if(single)box.querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed",single?"true":String(!on));box.closest(".field").classList.remove("bad")};box.appendChild(b)})});
+function sel(id){return[].slice.call($(id).querySelectorAll("[aria-pressed=true]")).map(function(b){return b.textContent})}
+function bad(id,c){$(id).closest(".field").classList.toggle("bad",c);return c}
+document.querySelectorAll("input,select,textarea").forEach(function(e){e.addEventListener("input",function(){var f=e.closest(".field");if(f)f.classList.remove("bad")})});
+var steps=[].slice.call(document.querySelectorAll(".step")),cur=0,max=6,done=[];
+var idx=$("idx");
+steps.forEach(function(s,i){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.innerHTML='<span class="n"></span><span></span>';b.lastChild.textContent=s.dataset.t;b.onclick=function(){if(i<=max)go(i)};li.appendChild(b);idx.appendChild(li)});
+function go(i,ns){cur=i;
+ if(go.init&&!ns)steps[i].scrollIntoView({behavior:"smooth",block:"start"});
+ [].slice.call(idx.querySelectorAll("button")).forEach(function(b,j){b.className=j===i?"on":(done[j]?"done":"");b.firstChild.textContent=done[j]&&j!==i?"\u2713":String(j+1);b.setAttribute("aria-current",j===i?"step":"false")});
+ $("pb").style.width=(done.filter(Boolean).length/steps.length*100)+"%";
+ $("mini").textContent="Step "+(i+1)+" of "+steps.length+": "+steps[i].dataset.t;
+ $("back").style.visibility=i===0?"hidden":"visible";
+ $("next").textContent="Start chatting";
+ 
+ }
+function valid(i){var b=false;
+ if(i===0){b=bad("name",!$("name").value.trim())|b;b=bad("email",!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("email").value.trim()))|b;b=bad("status",!$("status").value)|b;b=bad("qual",!$("qual").value)|b}
+ if(i===1)b=bad("c-int",!sel("c-int").length);
+ if(i===2)b=bad("c-skill",!sel("c-skill").length);
+ if(i===3)b=bad("c-style",!sel("c-style").length);
+ if(i===4){b=bad("c-goal",!sel("c-goal").length)|b;b=bad("c-why",!sel("c-why").length)|b}
+ if(i===6)b=bad("ok",!$("ok").checked);
+ if(b){var e=steps[i].querySelector(".bad input,.bad select,.bad textarea,.bad .chip");if(e)e.focus()}
+ return!b}
+function data(){return{name:$("name").value.trim(),status:$("status").value,qual:$("qual").value,field:$("field").value.trim(),interests:sel("c-int"),skills:sel("c-skill"),style:sel("c-style")[0],goals:sel("c-goal"),why:sel("c-why").join(", ")+($("why").value.trim()?" ("+$("why").value.trim()+")":""),hrs:$("hrs").value,dur:$("dur").value,budget:$("budget").value}}
+function summary(){var p=data(),rows=[["Now",p.status+", "+p.qual+(p.field?", "+p.field:"")],["Interests",p.interests.join(", ")],["Skills",p.skills.join(", ")],["Work style",p.style],["Priorities",p.goals.join(", ")],["Why this path",p.why],["Time",p.hrs+" a week, "+p.dur.toLowerCase()],["Budget",p.budget]],dl=$("sum");dl.innerHTML="";
+ rows.forEach(function(r){var a=document.createElement("dt"),b=document.createElement("dd");a.textContent=r[0];b.textContent=r[1];dl.appendChild(a);dl.appendChild(b)})}
+$("back").onclick=function(){if(cur>0)go(cur-1)};
+var profile={};
+$("f").addEventListener("submit",function(ev){ev.preventDefault();
+ var all=true,first=0;for(var k=steps.length-1;k>=0;k--){if(!valid(k)){all=false;first=k}else done[k]=true}if(!all){go(first);return}
+ 
+ profile=data();$("signup").style.display="none";$("chat").style.display="flex";
+ add("Hi "+profile.name.split(" ")[0]+", thanks for the detail. Here is what I will work from:\n\nNow: "+profile.status+", "+profile.qual+(profile.field?", "+profile.field:"")+"\nInterests: "+profile.interests.join(", ")+"\nSkills: "+profile.skills.join(", ")+"\nWork style: "+profile.style+"\nPriorities: "+profile.goals.join(", ")+"\nTime and budget: "+profile.hrs+" a week, "+profile.dur.toLowerCase()+", "+profile.budget.toLowerCase()+"\n\nYour reason for this path: \""+profile.why+"\"\n\nWhere should we start?",false);
+ ["Suggest courses for me","Map my career path","Build my learning plan"].forEach(function(t){var b=document.createElement("button");b.type="button";b.className="chip";b.textContent=t;b.onclick=function(){send(t)};$("quick").appendChild(b)});
+ $("mi").focus()});
+function add(t,me){var d=document.createElement("div");d.className="m"+(me?" me":"");d.textContent=t;$("msgs").appendChild(d);$("msgs").scrollTop=$("msgs").scrollHeight}
+function send(t){add(t,true);$("quick").innerHTML="";setTimeout(function(){add("Thanks for asking. Once this page is connected to a live advisor, you will get tailored answers here based on your intake and your reason for choosing this path.",false)},500)}
+$("sf").addEventListener("submit",function(e){e.preventDefault();var v=$("mi").value.trim();if(!v)return;$("mi").value="";send(v)});
+go(0);go.init=true;
+$("f").addEventListener("click",upd);$("f").addEventListener("input",upd);
+function upd(){steps.forEach(function(s,j){done[j]=!!quiet(j)});go(cur,1)}
+function quiet(i){return[$("name").value.trim()&&/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("email").value.trim())&&$("status").value&&$("qual").value,sel("c-int").length,sel("c-skill").length,sel("c-style").length,sel("c-goal").length&&sel("c-why").length,true,$("ok").checked][i]}
+if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)go(steps.indexOf(e.target),1)})},{rootMargin:"-30% 0px -60% 0px"});steps.forEach(function(s){io.observe(s)})}
+</script>
+</body>
+</html>

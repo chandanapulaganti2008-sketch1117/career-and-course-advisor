@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Career and course advisor: your career index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --card:#ffffff; --ink:#1f2160; --muted:#8a8da6; --line:#2d2f9a; --soft:#eef0fb; --chip:#f4f5fc; --accent:#3a3fd1;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0f1024;--card:#14163a;--ink:#e6e8ff;--muted:#9a9dc4;--line:#6f74ff;--soft:#1c1f52;--chip:#1a1d48;--accent:#9aa0ff;}
+}
+:root[data-theme="dark"]{--bg:#0f1024;--card:#14163a;--ink:#e6e8ff;--muted:#9a9dc4;--line:#6f74ff;--soft:#1c1f52;--chip:#1a1d48;--accent:#9aa0ff;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;padding:28px 16px 56px}
+.card{max-width:720px;margin:0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:28px;padding:32px 28px}
+.head{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.badge{width:46px;height:46px;border-radius:50%;background:var(--line);display:grid;place-items:center;color:#fff;font-weight:800;font-size:20px}
+.head b{color:var(--muted);font-size:18px;font-weight:700}
+.step{font-size:13px;color:var(--muted);margin:0 0 6px}
+h1{font-size:28px;line-height:1.2;margin:0 0 6px;font-weight:800;color:var(--muted)}
+h1 span{color:var(--ink)}
+.sub{margin:0;color:var(--ink);opacity:.8}
+hr{border:0;border-top:1.5px solid var(--line);margin:30px 0;opacity:.9}
+h2{font-size:22px;margin:0 0 4px;font-weight:800;color:var(--muted)}
+.note{margin:0 0 18px;font-size:14px}
+
+/* the index: dotted leaders like a book index */
+.index{list-style:none;margin:0;padding:0}
+.index li{margin:0}
+.index a{display:flex;align-items:baseline;gap:8px;padding:12px 4px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--soft)}
+.index a:hover{background:var(--soft)}
+.index a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.index .t{font-weight:700}
+.index .dots{flex:1;border-bottom:2px dotted var(--muted);transform:translateY(-4px);min-width:16px;opacity:.7}
+.index .s{font-weight:800;color:var(--accent);white-space:nowrap}
+.index .k{display:block;font-size:12.5px;color:var(--muted);font-weight:500}
+
+.path h3{font-size:21px;margin:0 0 2px;font-weight:800}
+.tag{font-size:13px;color:var(--muted);margin:0 0 12px}
+.why{background:var(--soft);border-radius:16px;padding:14px 16px;margin:0 0 14px;font-weight:500}
+.why b{display:block;font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:2px}
+.label{font-size:13px;color:var(--muted);font-weight:700;margin:14px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.chips li{background:var(--chip);border:1px solid var(--soft);border-radius:999px;padding:6px 13px;font-size:14px}
+.courses{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.courses li{border:1px solid var(--soft);background:var(--chip);border-radius:14px;padding:10px 14px}
+.courses b{display:block;font-weight:700}
+.courses span{font-size:13.5px;color:var(--muted)}
+.courses em{font-style:normal;font-size:12.5px;font-weight:700;color:var(--accent);margin-left:6px}
+.route{margin:12px 0 0;padding:12px 16px;border-left:4px solid var(--line);background:var(--soft);border-radius:0 14px 14px 0;font-weight:500}
+.route b{display:block;font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:2px}
+.pay{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;border:1.5px solid var(--line);border-radius:16px;padding:12px 16px}
+.pay strong{font-size:20px;color:var(--accent)}
+.pay small{color:var(--muted)}
+.foot{font-size:13px;color:var(--muted);margin:0}
+.top{display:inline-block;margin-top:14px;font-size:13px;color:var(--accent);text-decoration:none;font-weight:700}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.tabs button{font:inherit;font-weight:700;font-size:14px;color:var(--ink);background:var(--chip);border:1.5px solid var(--soft);border-radius:999px;padding:8px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--line);color:#fff;border-color:var(--line)}
+.tabs button:focus-visible,.lp button:focus-visible,dialog button:focus-visible,dialog a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lp{list-style:none;margin:0;padding:0;counter-reset:s}
+.lp li{position:relative;padding-left:44px;padding-bottom:12px}
+.lp li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--line);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
+.lp li::after{content:"";position:absolute;left:14px;top:42px;bottom:-2px;width:2px;background:var(--soft)}
+.lp li:last-child::after{display:none}
+.lp button{width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--chip);border:1.5px solid var(--soft);border-radius:16px;padding:12px 14px;cursor:pointer}
+.lp button:hover{border-color:var(--line)}
+.lp .n{display:block;font-weight:800}
+.lp .p{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.meta i{font-style:normal;font-size:12.5px;font-weight:700;background:var(--soft);border-radius:999px;padding:3px 10px}
+.lp .more{display:block;margin-top:8px;font-size:12.5px;color:var(--accent);font-weight:700}
+dialog{width:min(560px,calc(100% - 24px));max-height:calc(100% - 48px);overflow:auto;border:1.5px solid var(--line);border-radius:24px;background:var(--card);color:var(--ink);padding:24px;font-family:inherit}
+dialog::backdrop{background:rgba(20,22,60,.55)}
+dialog h4{font-size:21px;margin:0 0 2px;font-weight:800}
+dialog .by{margin:0 0 12px;color:var(--muted);font-size:14px}
+dialog h5{font-size:13px;color:var(--muted);margin:16px 0 6px;font-weight:700}
+dialog p,dialog li{font-size:15px}
+dialog ul{margin:0;padding-left:20px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid div{background:var(--soft);border-radius:12px;padding:8px 10px;font-size:14px;font-weight:700}
+.grid small{display:block;color:var(--muted);font-weight:500;font-size:12px}
+.mods{display:grid;gap:10px}
+.mod{display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:14px}
+.mod b{font-weight:600}.mod span{color:var(--muted);font-size:13px}
+.bar{grid-column:1/-1;height:6px;border-radius:6px;background:var(--soft)}
+.bar i{display:block;height:100%;border-radius:6px;background:var(--line)}
+.dots span{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--card);border:1.5px solid var(--line);margin-right:3px}
+.dots .on{background:var(--line)}
+dialog ul.chips{padding-left:0}
+.grid4{grid-template-columns:repeat(2,1fr)}
+.tip{margin-top:4px;padding:10px 14px;border-left:4px solid var(--line);background:var(--soft);border-radius:0 12px 12px 0}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btns a,.btns button{font:inherit;font-weight:700;font-size:14px;border-radius:999px;padding:10px 18px;cursor:pointer;text-decoration:none;border:1.5px solid var(--line)}
+.btns a{background:var(--line);color:#fff}
+.btns button{background:transparent;color:var(--ink)}
+@media (max-width:480px){.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.card{padding:24px 18px;border-radius:22px}h1{font-size:24px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<main class="card" id="top">
+  <div class="head"><div class="badge" aria-hidden="true">C</div><b>Your career index</b></div>
+
+  <p class="step">Based on: Data, AI and machine learning, Design, Marketing</p>
+  <h1>Three paths that <span>could fit you</span></h1>
+  <p class="sub">Your intake form was blank, so these cover the form's main themes. Salaries are rough entry-to-mid ranges in India, in lakh per year (LPA).</p>
+
+  <hr>
+
+  <h2>The index</h2>
+  <p class="note">Look up a path, then jump to its page.</p>
+  <ul class="index">
+    <li><a href="#data"><span><span class="t">Data analyst &amp; machine learning</span><span class="k">numbers, patterns, predictive models</span></span><span class="dots"></span><span class="s">4–15 LPA</span></a></li>
+    <li><a href="#design"><span><span class="t">UX &amp; product designer</span><span class="k">screens people enjoy using</span></span><span class="dots"></span><span class="s">4–14 LPA</span></a></li>
+    <li><a href="#growth"><span><span class="t">Content &amp; digital marketer</span><span class="k">stories that find an audience</span></span><span class="dots"></span><span class="s">3–10 LPA</span></a></li>
+    <li><a href="#learn"><span><span class="t">Learning paths, beginner to advanced</span><span class="k">courses, cost, duration, level</span></span><span class="dots"></span><span class="s">18 courses</span></a></li>
+  </ul>
+
+  <hr>
+
+  <section class="path" id="data">
+    <h3>Data analyst &amp; machine learning</h3>
+    <p class="tag">Turns raw data into decisions, then teaches models to predict what comes next</p>
+    <p class="why"><b>Why this fits you</b>You like logic and maths, and this path pays you to find the answer hiding in the numbers and then build models that predict it.</p>
+    <p class="label">Skills you'll need</p>
+    <ul class="chips"><li>Excel</li><li>SQL</li><li>Python</li><li>Statistics</li><li>Machine learning</li><li>scikit-learn</li><li>Data visualisation</li><li>Problem solving</li></ul>
+    <p class="label">Courses to choose</p>
+    <ul class="courses">
+      <li><b>Google Data Analytics Certificate <em>Paid, Coursera</em></b><span>Covers spreadsheets, SQL, Tableau and a portfolio project. Start here.</span></li>
+      <li><b>Kaggle Learn: Python, Pandas, SQL, Intro to ML <em>Free</em></b><span>Short hands-on lessons you can finish in a weekend each.</span></li>
+      <li><b>Machine Learning Specialization, Andrew Ng <em>Paid, Coursera</em></b><span>The standard first ML course: regression, neural networks, model tuning.</span></li>
+    </ul>
+    <p class="route"><b>Highest-package route</b>Learn SQL and Python first, then the ML Specialization, then publish 3 projects on GitHub or Kaggle. Data scientist and ML engineer roles pay the most in this path.</p>
+    <div class="pay"><strong>₹4–15 LPA</strong><small>analyst roles at the low end, ML skills push you toward the top</small></div>
+    <a class="top" href="#top">Back to index</a>
+  </section>
+
+  <hr>
+
+  <section class="path" id="design">
+    <h3>UX &amp; product designer</h3>
+    <p class="tag">Shapes how apps and websites feel</p>
+    <p class="why"><b>Why this fits you</b>You'd get creative freedom while still solving real problems for real users.</p>
+    <p class="label">Skills you'll need</p>
+    <ul class="chips"><li>Figma</li><li>User research</li><li>Wireframing</li><li>Visual design</li><li>Communication</li><li>Teamwork</li></ul>
+    <p class="label">Courses to choose</p>
+    <ul class="courses">
+      <li><b>Google UX Design Certificate <em>Paid, Coursera</em></b><span>Takes you from research to wireframes to a finished prototype.</span></li>
+      <li><b>Figma Learn and Figma tutorials <em>Free</em></b><span>Figma is the main tool employers expect, so practise in it daily.</span></li>
+      <li><b>Interaction Design Foundation courses <em>Paid membership</em></b><span>Go deeper on UX research, usability testing and design thinking.</span></li>
+    </ul>
+    <p class="route"><b>Highest-package route</b>Build 3 detailed case studies (problem, research, solution, result) in a portfolio site, then aim for product companies. Product designers and UX researchers there earn the most.</p>
+    <div class="pay"><strong>₹4–14 LPA</strong><small>a strong portfolio matters more than a degree</small></div>
+    <a class="top" href="#top">Back to index</a>
+  </section>
+
+  <hr>
+
+  <section class="path" id="growth">
+    <h3>Content &amp; digital marketer</h3>
+    <p class="tag">Grows brands with words, video and data</p>
+    <p class="why"><b>Why this fits you</b>It rewards writing and communication, and it's quick to learn and easy to do remotely.</p>
+    <p class="label">Skills you'll need</p>
+    <ul class="chips"><li>Writing</li><li>SEO</li><li>Social media</li><li>Analytics</li><li>Public speaking</li><li>Creative thinking</li></ul>
+    <p class="label">Courses to choose</p>
+    <ul class="courses">
+      <li><b>Google Digital Marketing &amp; E-commerce Certificate <em>Paid, Coursera</em></b><span>Covers SEO, paid ads, email and social media in one track.</span></li>
+      <li><b>HubSpot Academy: Content Marketing and SEO <em>Free</em></b><span>Good for writing, blogging and building a content strategy.</span></li>
+      <li><b>Google Analytics certification, Skillshop <em>Free</em></b><span>Proves you can measure results, which employers pay extra for.</span></li>
+    </ul>
+    <p class="route"><b>Highest-package route</b>Don't stay a general content writer. Specialise in performance marketing (paid ads) or SEO plus analytics, because roles tied to revenue pay more.</p>
+    <div class="pay"><strong>₹3–10 LPA</strong><small>rises quickly with results and specialisation</small></div>
+    <a class="top" href="#top">Back to index</a>
+  </section>
+
+  <hr>
+  <section id="learn">
+    <h2>Learning paths</h2>
+    <p class="note">Pick a career, then follow the courses in order. Tap a course to see what's inside.</p>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <ol class="lp" id="lp"></ol>
+    <a class="top" href="#top">Back to index</a>
+  </section>
+  <dialog id="dlg" aria-labelledby="dt"></dialog>
+  <hr>
+  <p class="foot">Durations are the providers' own estimates and vary with your pace. Costs: "Subscription" and "Membership" are paid, so check the current price on the platform.<br><br>Ranges are approximate and vary by city, company and experience. A certificate alone doesn't set your package: projects and a portfolio do. Course names, prices and availability change, so check each platform before enrolling. Fill in the form's answers and I'll tailor this index to you.</p>
+<script>
+const P={
+data:{tab:"Data analyst & ML",courses:[
+{t:"Python and Pandas (Kaggle Learn)",by:"Kaggle",lvl:"Beginner",dur:"~10 hours",cost:"Free",sum:"Short hands-on lessons that teach you to write Python and handle tables of data.",learn:["Python basics: variables, loops, functions","Pandas: filter, group and clean data","Reading and combining datasets"],pre:"None. A laptop and internet are enough.",proj:"Small coding exercises in the browser, no setup needed.",why:"Python and Pandas are the base skills every analyst and ML role asks for.",url:"https://www.kaggle.com/learn"},
+{t:"Google Data Analytics Certificate",by:"Google, on Coursera",lvl:"Beginner",dur:"~6 months at 10 hrs/week",cost:"Subscription",sum:"A full entry-level analyst programme from asking questions to presenting findings.",learn:["Spreadsheets and SQL for analysis","Cleaning and organising data","Dashboards in Tableau","Presenting insights to stakeholders"],pre:"None.",proj:"A capstone case study you can show in interviews.",why:"It gives you the analyst toolkit and a portfolio piece, which gets you the first job.",url:"https://www.coursera.org/professional-certificates/google-data-analytics"},
+{t:"Machine Learning Specialization",by:"Andrew Ng, DeepLearning.AI on Coursera",lvl:"Intermediate",dur:"~2 months at 10 hrs/week",cost:"Subscription",sum:"The most widely used first course in machine learning, taught clearly with Python labs.",learn:["Linear and logistic regression","Neural networks and decision trees","Model evaluation and tuning","Recommender systems and unsupervised learning"],pre:"Basic Python and school-level maths.",proj:"Coding labs for every topic.",why:"ML skills move you from analyst pay toward data scientist pay.",url:"https://www.coursera.org/specializations/machine-learning-introduction"},
+{t:"Deep Learning Specialization",by:"DeepLearning.AI on Coursera",lvl:"Advanced",dur:"~3 months at 10 hrs/week",cost:"Subscription",sum:"Goes deep into neural networks, the technology behind modern AI.",learn:["Building neural networks from scratch","Tuning and improving networks","Convolutional networks for images","Sequence models for text"],pre:"The Machine Learning Specialization or equal knowledge, plus Python.",proj:"Image and language programming assignments.",why:"Deep learning is the skill behind the highest-paid ML engineer roles.",url:"https://www.coursera.org/specializations/deep-learning"}]},
+design:{tab:"UX & product design",courses:[
+{t:"Figma Learn tutorials",by:"Figma",lvl:"Beginner",dur:"~10 hours, self-paced",cost:"Free",sum:"Free guides to the design tool most employers expect you to know.",learn:["Frames, layout and components","Prototyping clickable screens","Sharing and collaborating"],pre:"None. A free Figma account.",proj:"Recreate 2-3 screens of an app you like.",why:"Tool fluency gets you through the first portfolio review.",url:"https://help.figma.com"},
+{t:"Google UX Design Certificate",by:"Google, on Coursera",lvl:"Beginner",dur:"~6 months at 10 hrs/week",cost:"Subscription",sum:"A structured start to finish programme in the UX design process.",learn:["User research and personas","Wireframes and low-fidelity designs","Prototypes in Figma","Usability testing"],pre:"None.",proj:"Three portfolio projects, including a mobile app and a responsive website.",why:"You finish with real case studies, the main thing hiring managers look at.",url:"https://www.coursera.org/professional-certificates/google-ux-design"},
+{t:"User Research: Methods and Best Practices",by:"Interaction Design Foundation",lvl:"Intermediate",dur:"~6-8 weeks",cost:"Membership",sum:"Learn how to find out what users really need before you design anything.",learn:["Interviews and surveys","Usability testing","Turning findings into design decisions"],pre:"Basic UX knowledge from the Google certificate.",proj:"Run a small research study.",why:"Research skills lead toward UX researcher and senior designer roles.",url:"https://www.interaction-design.org"},
+{t:"Capstone: 3 case-study portfolio",by:"Self-directed project",lvl:"Advanced",dur:"~4-6 weeks",cost:"Free",sum:"Redesign a real product and document your thinking from problem to result.",learn:["Defining a clear problem","Showing research and decisions","Presenting results with before/after screens"],pre:"The earlier courses.",proj:"A portfolio site with 3 polished case studies.",why:"A strong portfolio decides your offer more than any certificate.",url:"https://www.coursera.org/professional-certificates/google-ux-design"}]},
+growth:{tab:"Content & digital marketing",courses:[
+{t:"Content Marketing Certification",by:"HubSpot Academy",lvl:"Beginner",dur:"~5 hours",cost:"Free",sum:"A short free course on planning and writing content that attracts customers.",learn:["Content strategy basics","Writing for a target audience","Distributing and repurposing content"],pre:"None.",proj:"Plan a content calendar.",why:"Quick win that shows you understand how content drives business results.",url:"https://academy.hubspot.com"},
+{t:"Google Digital Marketing & E-commerce Certificate",by:"Google, on Coursera",lvl:"Beginner",dur:"~6 months at 10 hrs/week",cost:"Subscription",sum:"Covers the whole digital marketing toolkit in one programme.",learn:["Search engine optimisation","Paid ads and email marketing","Social media and online stores","Measuring campaign results"],pre:"None.",proj:"Campaign and store projects for your portfolio.",why:"Gives you the full picture so you can pick a high-paying speciality.",url:"https://www.coursera.org/professional-certificates/google-digital-marketing-ecommerce"},
+{t:"Google Analytics Certification",by:"Google Skillshop",lvl:"Intermediate",dur:"~4-6 hours plus exam",cost:"Free",sum:"Learn to read website and campaign data and prove what works.",learn:["Tracking visitors and conversions","Reading reports","Using data to improve campaigns"],pre:"Basic marketing knowledge.",proj:"Analyse a sample store's data.",why:"Marketers who can measure results earn more than those who only create content.",url:"https://skillshop.withgoogle.com"},
+{t:"Google Ads Search Certification",by:"Google Skillshop",lvl:"Advanced",dur:"~8-10 hours plus exam",cost:"Free",sum:"Learn to run and improve paid search campaigns.",learn:["Building search campaigns","Keywords, bids and budgets","Improving ad performance"],pre:"The earlier courses.",proj:"Plan a small ad campaign.",why:"Performance marketing is tied to revenue, so it is among the best-paid marketing roles.",url:"https://skillshop.withgoogle.com"}]}};
+const tabs=document.getElementById("tabs"),lp=document.getElementById("lp"),dlg=document.getElementById("dlg");
+let cur="data",opener=null;
+function show(k){cur=k;
+ tabs.innerHTML="";
+ Object.keys(P).forEach(key=>{const b=document.createElement("button");b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",key===k);b.textContent=P[key].tab;b.onclick=()=>show(key);tabs.appendChild(b)});
+ lp.innerHTML="";
+ P[k].courses.forEach((c,i)=>{const li=document.createElement("li");
+  li.innerHTML='<button type="button"><span class="n">'+c.t+'</span><span class="p">'+c.by+'</span><span class="meta"><i>'+c.lvl+'</i><i>'+c.dur+'</i><i>'+c.cost+'</i></span><span class="more">See course details</span></button>';
+  li.firstChild.onclick=e=>{opener=e.currentTarget;open_(c)};lp.appendChild(li)});}
+function open_(c){
+ dlg.innerHTML='<h4 id="dt">'+c.t+'</h4><p class="by">'+c.by+'</p><div class="grid"><div><small>Level</small>'+c.lvl+'</div><div><small>Duration</small>'+c.dur+'</div><div><small>Cost</small>'+c.cost+'</div></div><h5>What it is</h5><p>'+c.sum+'</p><h5>What you will learn</h5><ul>'+c.learn.map(x=>'<li>'+x+'</li>').join("")+'</ul><h5>Before you start</h5><p>'+c.pre+'</p><h5>What you will build</h5><p>'+c.proj+'</p><h5>How it helps your package</h5><p>'+c.why+'</p><div class="btns"><a href="'+c.url+'" target="_blank" rel="noopener">Open course page</a><button type="button" id="cl">Close</button></div>';
+ dlg.querySelector("#cl").onclick=()=>dlg.close();
+ dlg.showModal();}
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
+dlg.addEventListener("close",()=>{if(opener)opener.focus()});
+show(cur);
+</script>
+<script>
+const NEW={
+data:[
+{t:"Intro to SQL (Kaggle Learn)",by:"Kaggle",lvl:"Beginner",dur:"~3 hours",cost:"Free",sum:"A fast, free introduction to asking questions of a database with SQL.",learn:["SELECT, WHERE and ORDER BY","Grouping and counting","Joining tables"],pre:"None.",proj:"Query real sample datasets in the browser.",why:"SQL is asked about in almost every analyst interview.",url:"https://www.kaggle.com/learn"},
+{t:"Machine Learning Engineering for Production (MLOps) Specialization",by:"DeepLearning.AI on Coursera",lvl:"Advanced",dur:"~4 months at 5 hrs/week",cost:"Subscription",sum:"Teaches how to take a model from a notebook to a system that runs reliably for real users.",learn:["Designing ML systems end to end","Collecting and managing data","Deploying and monitoring models"],pre:"Machine learning basics and intermediate Python.",proj:"Build and deploy a model pipeline.",why:"Companies pay a premium for people who can ship models, not only train them.",url:"https://www.coursera.org/specializations/machine-learning-engineering-for-production-mlops"}],
+design:[
+{t:"Interaction Design Specialization",by:"UC San Diego on Coursera",lvl:"Intermediate",dur:"~6 months at 4 hrs/week",cost:"Subscription",sum:"A university-style programme on how people interact with products and how to design for them.",learn:["Human-centred design methods","Prototyping and evaluation","Designing for different devices"],pre:"Basic UX knowledge helps.",proj:"Design projects across several modules.",why:"Deeper theory helps you explain your design choices in senior interviews.",url:"https://www.coursera.org/specializations/interaction-design"},
+{t:"Learn Accessibility (web.dev)",by:"Google, web.dev",lvl:"Intermediate",dur:"~10 hours, self-paced",cost:"Free",sum:"Free lessons on designing products that everyone, including people with disabilities, can use.",learn:["Colour contrast and readable text","Keyboard and screen reader use","Accessible forms and images"],pre:"Basic web or app design knowledge.",proj:"Audit a real page for accessibility problems.",why:"Accessibility skills set you apart and are required at many large companies.",url:"https://web.dev/learn/accessibility"}],
+growth:[
+{t:"Meta Social Media Marketing Professional Certificate",by:"Meta, on Coursera",lvl:"Beginner",dur:"~5 months at 5 hrs/week",cost:"Subscription",sum:"Learn to plan, run and measure marketing on Facebook and Instagram.",learn:["Social media strategy and content","Running paid social campaigns","Measuring results"],pre:"None.",proj:"A social media campaign plan.",why:"Paid social is a big hiring area for performance marketers.",url:"https://www.coursera.org/professional-certificates/facebook-social-media-marketing"},
+{t:"SEO Certification",by:"HubSpot Academy",lvl:"Intermediate",dur:"~4 hours",cost:"Free",sum:"A free course on getting pages to rank higher in search results.",learn:["Keyword research","On-page and technical SEO","Link building basics"],pre:"Basic marketing knowledge.",proj:"Optimise a sample page.",why:"SEO skills lead to specialist roles that often pay above general content roles.",url:"https://academy.hubspot.com"}]};
+const ORDER={
+data:["Python and Pandas (Kaggle Learn)","Intro to SQL (Kaggle Learn)","Google Data Analytics Certificate","Machine Learning Specialization","Deep Learning Specialization","Machine Learning Engineering for Production (MLOps) Specialization"],
+design:["Figma Learn tutorials","Google UX Design Certificate","Interaction Design Specialization","User Research: Methods and Best Practices","Learn Accessibility (web.dev)","Capstone: 3 case-study portfolio"],
+growth:["Content Marketing Certification","Google Digital Marketing & E-commerce Certificate","Meta Social Media Marketing Professional Certificate","SEO Certification","Google Analytics Certification","Google Ads Search Certification"]};
+Object.keys(NEW).forEach(k=>{P[k].courses.push(...NEW[k]);P[k].courses.sort((a,b)=>ORDER[k].indexOf(a.t)-ORDER[k].indexOf(b.t))});
+const ADV={
+"Python and Pandas (Kaggle Learn)":{d:1,tools:["Python","Pandas","Jupyter notebooks"],out:"Junior data analyst, reporting analyst",tip:"Do one lesson a day and retype the code instead of copying it.",m:[["Python basics",4],["Pandas: select and filter",3],["Grouping and cleaning data",3]]},
+"Intro to SQL (Kaggle Learn)":{d:1,tools:["SQL","BigQuery"],out:"Data analyst, business analyst",tip:"Practise the same query three ways to learn joins properly.",m:[["Select and filter",1],["Group, count and order",1],["Joins",1]]},
+"Google Data Analytics Certificate":{d:2,tools:["Spreadsheets","SQL","Tableau","R"],out:"Junior data analyst, operations analyst",tip:"Finish the capstone and put it on GitHub with a short write-up.",m:[["Ask questions and prepare data",40],["Process and clean data",40],["Analyse data",35],["Share findings and visualise",40],["Capstone project",30]]},
+"Machine Learning Specialization":{d:3,tools:["Python","NumPy","scikit-learn","TensorFlow"],out:"Data scientist, ML analyst",tip:"Review basic algebra and averages first. The labs make more sense after.",m:[["Supervised learning: regression and classification",30],["Advanced algorithms: neural networks, trees",30],["Unsupervised learning and recommenders",30]]},
+"Deep Learning Specialization":{d:4,tools:["Python","TensorFlow","Keras"],out:"ML engineer, AI engineer",tip:"Take it after you have finished at least one small ML project of your own.",m:[["Neural networks and deep learning",25],["Improving deep networks",25],["Structuring ML projects",10],["Convolutional networks",30],["Sequence models",30]]},
+"Machine Learning Engineering for Production (MLOps) Specialization":{d:5,tools:["Python","TensorFlow Extended","Docker","Cloud tools"],out:"ML engineer, MLOps engineer",tip:"Deploy a small model of your own alongside the lessons.",m:[["ML production systems",25],["Data and modelling pipelines",30],["Deployment",25],["Monitoring and maintenance",20]]},
+"Figma Learn tutorials":{d:1,tools:["Figma"],out:"Junior UI designer",tip:"Copy a screen from an app you use daily, pixel by pixel.",m:[["Interface and frames",2],["Components and auto layout",4],["Prototyping",4]]},
+"Google UX Design Certificate":{d:2,tools:["Figma","Adobe XD","Miro"],out:"Junior UX designer, UI designer",tip:"Treat each course project as a portfolio case study from day one.",m:[["Foundations of UX",25],["Empathise and define",30],["Wireframes and prototypes",35],["Usability testing",30],["Responsive web design",30],["Capstone portfolio",40]]},
+"Interaction Design Specialization":{d:3,tools:["Prototyping tools","Evaluation methods"],out:"Interaction designer, UX designer",tip:"Pick one product and apply every module to it.",m:[["Human-centred design",30],["Needfinding and prototyping",30],["Evaluation methods",30]]},
+"User Research: Methods and Best Practices":{d:3,tools:["Interviews","Surveys","Usability tests"],out:"UX researcher, senior UX designer",tip:"Run a real interview with a friend and write up the findings.",m:[["Planning research",8],["Interviews and surveys",12],["Usability testing",12],["Reporting findings",8]]},
+"Learn Accessibility (web.dev)":{d:3,tools:["Screen reader","Browser dev tools"],out:"UX designer, accessibility specialist",tip:"Try one lesson using only your keyboard to feel the problems.",m:[["Basics and colour contrast",2],["Keyboard and focus",3],["Forms, images and ARIA",5]]},
+"Capstone: 3 case-study portfolio":{d:4,tools:["Figma","Portfolio site"],out:"UX designer, product designer",tip:"Show the problem, your process and a measurable result in each study.",m:[["Pick 3 real problems",10],["Research and design",60],["Write and publish case studies",30]]},
+"Content Marketing Certification":{d:1,tools:["HubSpot","Content calendar"],out:"Content writer, content marketing executive",tip:"Write one real blog post while you take the course.",m:[["Content strategy",1.5],["Creating content",2],["Distribution and repurposing",1.5]]},
+"Google Digital Marketing & E-commerce Certificate":{d:2,tools:["Google Ads","Analytics","Email tools","Shopify"],out:"Digital marketing executive, SEO or social executive",tip:"Set up a small free website to practise every skill on.",m:[["Foundations of marketing",25],["Attract and engage customers",30],["Search and ads",30],["Email and analytics",30],["E-commerce and capstone",40]]},
+"Meta Social Media Marketing Professional Certificate":{d:2,tools:["Meta Ads Manager","Instagram"],out:"Social media executive, paid social executive",tip:"Run a tiny real campaign with a small budget for experience.",m:[["Marketing on social platforms",20],["Content creation",25],["Paid campaigns",25],["Measuring results",20]]},
+"SEO Certification":{d:2,tools:["Keyword tools","Search Console"],out:"SEO executive, content strategist",tip:"Optimise one page of your own and track its ranking for a month.",m:[["Keyword research",1],["On-page SEO",1.5],["Technical SEO and links",1.5]]},
+"Google Analytics Certification":{d:3,tools:["Google Analytics 4"],out:"Marketing analyst, digital marketing specialist",tip:"Connect it to your own site so you practise on live data.",m:[["Setting up tracking",1.5],["Reports and audiences",2],["Conversions and attribution",1.5]]},
+"Google Ads Search Certification":{d:4,tools:["Google Ads","Keyword Planner"],out:"Performance marketer, PPC specialist",tip:"Practise in the free demo account before taking the exam.",m:[["Search campaign basics",2],["Keywords and bidding",3],["Ads and extensions",2],["Measurement and optimisation",2]]}};
+open_=function(c){
+ const a=ADV[c.t]||{m:[],tools:[],d:1,out:"",tip:""};
+ const mx=Math.max(...a.m.map(x=>x[1]),1),tot=a.m.reduce((s,x)=>s+x[1],0);
+ const dots=[1,2,3,4,5].map(i=>'<span class="'+(i<=a.d?'on':'')+'"></span>').join("");
+ dlg.innerHTML='<h4 id="dt">'+c.t+'</h4><p class="by">'+c.by+'</p>'+
+ '<div class="grid grid4"><div><small>Level</small>'+c.lvl+'</div><div><small>Duration</small>'+c.dur+'</div><div><small>Cost</small>'+c.cost+'</div><div><small>Difficulty</small><span class="dots" aria-label="Difficulty '+a.d+' of 5">'+dots+'</span></div></div>'+
+ '<h5>What it is</h5><p>'+c.sum+'</p>'+
+ '<h5>Module breakdown (approx. '+tot+' hours in total)</h5><div class="mods">'+a.m.map(x=>'<div class="mod"><b>'+x[0]+'</b><span>~'+x[1]+' h</span><div class="bar"><i style="width:'+Math.round(x[1]/mx*100)+'%"></i></div></div>').join("")+'</div>'+
+ '<h5>What you will learn</h5><ul>'+c.learn.map(x=>'<li>'+x+'</li>').join("")+'</ul>'+
+ '<h5>Tools you will use</h5><ul class="chips">'+a.tools.map(x=>'<li>'+x+'</li>').join("")+'</ul>'+
+ '<h5>Before you start</h5><p>'+c.pre+'</p>'+
+ '<h5>What you will build</h5><p>'+c.proj+'</p>'+
+ '<h5>Jobs it leads toward</h5><p>'+a.out+'</p>'+
+ '<h5>How it helps your package</h5><p>'+c.why+'</p>'+
+ '<h5>Study tip</h5><p class="tip">'+a.tip+'</p>'+
+ '<div class="btns"><a href="'+c.url+'" target="_blank" rel="noopener">Open course page</a><button type="button" id="cl">Close</button></div>';
+ dlg.querySelector("#cl").onclick=()=>dlg.close();
+ dlg.showModal();};
+show(cur);
+</script>
+</main>
+</body>
+</html>
